@@ -1,0 +1,21 @@
+##Dockerizing a go web app
+FROM golang
+
+MAINTAINER Kristina Hager <kristina.hager@gmail.com>
+
+#don't include git history in this image
+RUN echo ".git" > .dockerignore
+
+# install gin: https://github.com/codegangsta/gin
+RUN go get github.com/codegangsta/gin
+
+#mgo for talking to mongodb
+RUN go get gopkg.in/mgo.v2
+
+# change to src code workdir
+WORKDIR /usr/src/go/src/test-docker-go-mongodb
+
+##-a 8080 -- the web app uses port 8080
+#for whatever reason, gin is using port 3000 to display the web app
+CMD gin -a 8080 test-docker-go-mongo-db
+EXPOSE 3000
